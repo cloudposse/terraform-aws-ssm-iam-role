@@ -1,4 +1,4 @@
-# terraform-aws-ssm-iam-role [![Build Status](https://travis-ci.org/cloudposse/terraform-aws-ssm-iam-role.svg?branch=master)](https://travis-ci.org/cloudposse/terraform-aws-ssm-iam-role)
+# terraform-aws-ssm-iam-role [![Build Status](https://travis-ci.org/cloudposse/terraform-aws-ssm-iam-role.svg?branch=master)](https://travis-ci.org/cloudposse/terraform-aws-ssm-iam-role) [![Slack Community](https://slack.cloudposse.com/badge.svg)](https://slack.cloudposse.com)
 
 Terraform module to provision an IAM role with configurable permissions to access [SSM Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html).
 
