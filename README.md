@@ -117,7 +117,7 @@ module "ssm_iam_role" {
 
 **Got a question?**
 
-File a GitHub [issue](https://github.com/cloudposse/terraform-aws-ssm-iam-role/issues), send us an [email](mailto:hello@cloudposse.com) or reach out to us on [Gitter](https://gitter.im/cloudposse/).
+Review the [docs](https://docs.cloudposse.com/), ask a [question](https://docs.cloudposse.com/discuss-new), file a GitHub [issue](https://github.com/cloudposse/terraform-aws-ssm-iam-role/issues), send us an [email](mailto:hello@cloudposse.com) or reach out to us on [Slack](https://slack.cloudposse.com).
 
 
 ## Contributing
