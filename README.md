@@ -9,7 +9,7 @@ __NOTE:__ This module can be used to provision IAM roles for [chamber](https://d
 
 ## Usage
 
-### Basic example
+### Basic Example
 
 This example creates a role with the name `cp-prod-app-all` with permission to read all SSM parameters, 
 and gives permission to the entities specified in `assume_role_arns` to assume the role.
@@ -28,7 +28,7 @@ module "ssm_iam_role" {
 }
 ```
 
-### Example with permission for specific resources
+### Example With Permission For Specific Resources
 
 This example creates a role with the name `cp-prod-app-secrets` with permission to read the SSM parameters that begin with `secret-`, 
 and gives permission to the entities specified in `assume_role_arns` to assume the role.
@@ -47,7 +47,7 @@ module "ssm_iam_role" {
 }
 ```
 
-### Complete Example with permission for a specific path
+### Complete Example
 
 This example:
 
@@ -167,7 +167,7 @@ See [LICENSE](LICENSE) for full details.
 
 ## About
 
-`This project is maintained and funded by [Cloud Posse, LLC][website].
+This project is maintained and funded by [Cloud Posse, LLC][website].
 
 ![Cloud Posse](https://cloudposse.com/logo-300x69.png)
 
