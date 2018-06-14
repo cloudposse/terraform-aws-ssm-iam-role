@@ -10,7 +10,7 @@ variable "stage" {
 
 variable "name" {
   type        = "string"
-  description = "Name (e.g. `chamber`)"
+  description = "Name (e.g. `app` or `chamber`)"
 }
 
 variable "delimiter" {
@@ -31,8 +31,18 @@ variable "tags" {
   description = "Additional tags (e.g. map(`BusinessUnit`,`XYZ`)"
 }
 
+variable "region" {
+  type        = "string"
+  description = "AWS Region"
+}
+
+variable "account_id" {
+  type        = "string"
+  description = "AWS account ID"
+}
+
 variable "kms_key_arn" {
-  description = "ARN of the KMS key which will decrypt SSM secret strings"
+  description = "ARN of the KMS key which will encrypt/decrypt SSM secret strings"
 }
 
 variable "assume_role_arns" {
@@ -46,9 +56,9 @@ variable "ssm_actions" {
   description = "SSM actions to allow"
 }
 
-variable "ssm_resources" {
+variable "ssm_parameters" {
   type        = "list"
-  description = "SSM resources to apply the actions"
+  description = "List of SSM parameters to apply the actions. A parameter can include a path and a name pattern that you define by using forward slashes, e.g. `kops/secret-*`"
 }
 
 variable "max_session_duration" {

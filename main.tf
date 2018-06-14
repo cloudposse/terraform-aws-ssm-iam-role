@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "default" {
 
   statement {
     actions   = ["${var.ssm_actions}"]
-    resources = ["${var.ssm_resources}"]
+    resources = ["${formatlist("arn:aws:ssm:%s:%s:parameter/%s", var.region, var.account_id, var.ssm_parameters)}"]
     effect    = "Allow"
   }
 

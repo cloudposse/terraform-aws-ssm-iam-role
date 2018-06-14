@@ -4,7 +4,9 @@ Terraform module to provision an IAM role with configurable permissions to acces
 
 For more information on how to control access to Systems Manager parameters by using AWS Identity and Access Management, see [Controlling Access to Systems Manager Parameters](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-access.html).
 
-__NOTE:__ This module can be used to provision IAM roles for [chamber](https://docs.cloudposse.com/tools/chamber/) with permissions to access SSM parameters.
+For more information on how to use parameter hierarchies to help organize and manage parameters, see [Organizing Parameters into Hierarchies](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-su-organize.html).
+
+__NOTE:__ This module can be used to provision IAM roles with SSM permissions for [chamber](https://docs.cloudposse.com/tools/chamber/).
 
 
 ## Usage
@@ -21,9 +23,11 @@ module "ssm_iam_role" {
   stage            = "prod"
   name             = "app"
   attributes       = ["all"]
+  region           = "us-west-2"
+  account_id       = "XXXXXXXXXXX"
   assume_role_arns = ["arn:aws:xxxxxxxxxx", "arn:aws:yyyyyyyyyyyy"]
   kms_key_arn      = "arn:aws:kms:us-west-2:123454095951:key/aced568e-3375-4ece-85e5-b35abc46c243"
-  ssm_resources    = ["arn:aws:ssm:us-west-2:1234567890:parameter/*"]
+  ssm_parameters   = ["*"]
   ssm_actions      = ["ssm:GetParametersByPath", "ssm:GetParameters"]
 }
 ```
@@ -40,9 +44,11 @@ module "ssm_iam_role" {
   stage            = "prod"
   name             = "app"
   attributes       = ["secrets"]
+  region           = "us-west-2"
+  account_id       = "XXXXXXXXXXX"
   assume_role_arns = ["arn:aws:xxxxxxxxxx", "arn:aws:yyyyyyyyyyyy"]
   kms_key_arn      = "arn:aws:kms:us-west-2:123454095951:key/aced568e-3375-4ece-85e5-b35abc46c243"
-  ssm_resources    = ["arn:aws:ssm:us-west-2:1234567890:parameter/secret-*"]
+  ssm_parameters   = ["secret-*"]
   ssm_actions      = ["ssm:GetParameters"]
 }
 ```
@@ -78,9 +84,11 @@ module "ssm_iam_role" {
   stage            = "prod"
   name             = "chamber"
   attributes       = ["kops"]
+  region           = "us-west-2"
+  account_id       = "XXXXXXXXXXX"
   assume_role_arns = ["${module.kops_metadata.masters_role_arn}", "${module.kops_metadata.nodes_role_arn}"]
   kms_key_arn      = "${module.kms_key.key_arn}"
-  ssm_resources    = ["arn:aws:ssm:us-west-2:1234567890:parameter/kops/*"]
+  ssm_parameters   = ["kops/*"]
   ssm_actions      = ["ssm:GetParametersByPath", "ssm:GetParameters"]
 }
 ```
@@ -92,11 +100,13 @@ module "ssm_iam_role" {
 |:-----------------------|:----------------|:---------------------------------------------------------------------------------|:--------:|
 | namespace              | ``              | Namespace (_e.g._ `cp` or `cloudposse`)                                          | Yes      |
 | stage                  | ``              | Stage (_e.g._ `prod`, `dev`, `staging`)                                          | Yes      |
-| name                   | ``              | Name (e.g. `chamber`)                                                            | Yes      |
-| kms_key_arn            | ``              | ARN of the KMS key which will decrypt SSM secret strings                         | Yes      |
+| name                   | ``              | Name (e.g. `app` or `chamber`)                                                   | Yes      |
+| region                 | ``              | AWS Region                                                                       | Yes      |
+| account_id             | ``              | AWS account ID                                                                   | Yes      |
+| kms_key_arn            | ``              | ARN of the KMS key which will encrypt/decrypt SSM secret strings                 | Yes      |
 | assume_role_arns       | ``              | List of ARNs to allow assuming the role. Could be AWS services or accounts, Kops nodes, IAM users or groups    | Yes      |
 | ssm_actions            | `["ssm:GetParametersByPath", "ssm:GetParameters"]`   | SSM actions to allow                        |    Yes   |
-| ssm_resources          | ``              | SSM resources to apply the actions                                               |    Yes   |
+| ssm_parameters         | ``              | List of SSM parameters to apply the actions. A parameter can include a path and a name pattern that you define by using forward slashes, e.g. `kops/secret-*` |    Yes   |
 | max_session_duration   | 3600            | The maximum session duration (in seconds) for the role. Can have a value from 1 hour to 12 hours               | No       |
 | attributes             | `[]`            | Additional attributes (_e.g._ `1`)                                               | No       |
 | tags                   | `{}`            | Additional tags  (_e.g._ `map("Cluster","us-east-1.cloudposse.co")`              | No       |
