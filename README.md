@@ -54,7 +54,7 @@ This example:
 * Provisions a KMS key to encrypt SSM Parameter Store secrets using [terraform-aws-kms-key](https://github.com/cloudposse/terraform-aws-kms-key) module
 * Performs `Kops` cluster lookup to find the ARNs of `masters` and `nodes` by using [terraform-aws-kops-metadata](https://github.com/cloudposse/terraform-aws-kops-metadata) module
 * Creates a role with the name `cp-prod-chamber-kops` with permission to read all SSM parameters from the path `kops`, 
-and gives permission to the `masters` and `nodes` to assume the role.
+and gives permission to the Kops `masters` and `nodes` to assume the role
 
 ```hcl
 module "kms_key" {
