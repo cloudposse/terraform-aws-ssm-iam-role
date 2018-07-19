@@ -52,6 +52,11 @@ module "ssm_iam_role" {
 }
 ```
 
+
+
+
+## Examples
+
 ### Example With Permission For Specific Resources
 
 This example creates a role with the name `cp-prod-app-secrets` with permission to read the SSM parameters that begin with `secret-`, 
@@ -112,9 +117,6 @@ module "ssm_iam_role" {
   ssm_actions      = ["ssm:GetParametersByPath", "ssm:GetParameters"]
 }
 ```
-
-
-
 
 
 
