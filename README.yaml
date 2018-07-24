@@ -1,0 +1,143 @@
+---
+#
+# This is the canonical configuration for the `README.md`
+# Run `make readme` to rebuild the `README.md`
+#
+
+# Name of this project
+name: terraform-aws-ssm-iam-role
+
+# Logo for this project
+#logo: docs/logo.png
+
+# License of this project
+license: "APACHE2"
+
+# Canonical GitHub repo
+github_repo: cloudposse/terraform-aws-ssm-iam-role
+
+# Badges to display
+badges:
+  - name: "Build Status"
+    image: "https://travis-ci.org/cloudposse/terraform-aws-ssm-iam-role.svg?branch=master"
+    url: "https://travis-ci.org/cloudposse/terraform-aws-ssm-iam-role"
+  - name: "Latest Release"
+    image: "https://img.shields.io/github/release/cloudposse/terraform-aws-ssm-iam-role.svg"
+    url: "https://github.com/cloudposse/terraform-aws-ssm-iam-role/releases/latest"
+  - name: "Slack Community"
+    image: "https://slack.cloudposse.com/badge.svg"
+    url: "https://slack.cloudposse.com"
+
+related:
+  - name: "terraform-aws-ssm-parameter-store"
+    description: "Terraform module to populate AWS Systems Manager (SSM) Parameter Store with values from Terraform. Works great with Chamber."
+    url: "https://github.com/cloudposse/terraform-aws-ssm-parameter-store"
+  - name: "terraform-aws-ssm-parameter-store-policy-documents"
+    description: "A Terraform module that generates JSON documents for access for common AWS SSM Parameter Store policies"
+    url: "https://github.com/cloudposse/terraform-aws-ssm-parameter-store-policy-documents"
+  - name: "terraform-aws-iam-chamber-user"
+    description: "Terraform module to provision a basic IAM chamber user with access to SSM parameters and KMS key to decrypt secrets, suitable for CI/CD systems (e.g. TravisCI, CircleCI, CodeFresh) or systems which are external to AWS that cannot leverage AWS IAM Instance Profiles"
+    url: "https://github.com/cloudposse/terraform-aws-iam-chamber-user"
+
+# Short description of this project
+description: |-
+  Terraform module to provision an IAM role with configurable permissions to access [SSM Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html).
+
+introduction: |-
+  For more information on how to control access to Systems Manager parameters by using AWS Identity and Access Management, see [Controlling Access to Systems Manager Parameters](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-access.html).
+
+  For more information on how to use parameter hierarchies to help organize and manage parameters, see [Organizing Parameters into Hierarchies](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-su-organize.html).
+
+  __NOTE:__ This module can be used to provision IAM roles with SSM permissions for [chamber](https://docs.cloudposse.com/tools/chamber/).  
+
+# How to use this project
+usage: |-
+  This example creates a role with the name `cp-prod-app-all` with permission to read all SSM parameters, 
+  and gives permission to the entities specified in `assume_role_arns` to assume the role.
+
+  ```hcl
+  module "ssm_iam_role" {
+    source           = "git::https://github.com/cloudposse/terraform-aws-ssm-iam-role.git?ref=master"
+    namespace        = "cp"
+    stage            = "prod"
+    name             = "app"
+    attributes       = ["all"]
+    region           = "us-west-2"
+    account_id       = "XXXXXXXXXXX"
+    assume_role_arns = ["arn:aws:xxxxxxxxxx", "arn:aws:yyyyyyyyyyyy"]
+    kms_key_arn      = "arn:aws:kms:us-west-2:123454095951:key/aced568e-3375-4ece-85e5-b35abc46c243"
+    ssm_parameters   = ["*"]
+    ssm_actions      = ["ssm:GetParametersByPath", "ssm:GetParameters"]
+  }
+  ```
+
+examples: |-
+  ### Example With Permission For Specific Resources
+
+  This example creates a role with the name `cp-prod-app-secrets` with permission to read the SSM parameters that begin with `secret-`, 
+  and gives permission to the entities specified in `assume_role_arns` to assume the role.
+
+  ```hcl
+  module "ssm_iam_role" {
+    source           = "git::https://github.com/cloudposse/terraform-aws-ssm-iam-role.git?ref=master"
+    namespace        = "cp"
+    stage            = "prod"
+    name             = "app"
+    attributes       = ["secrets"]
+    region           = "us-west-2"
+    account_id       = "XXXXXXXXXXX"
+    assume_role_arns = ["arn:aws:xxxxxxxxxx", "arn:aws:yyyyyyyyyyyy"]
+    kms_key_arn      = "arn:aws:kms:us-west-2:123454095951:key/aced568e-3375-4ece-85e5-b35abc46c243"
+    ssm_parameters   = ["secret-*"]
+    ssm_actions      = ["ssm:GetParameters"]
+  }
+  ```
+
+  ### Complete Example
+
+  This example:
+
+  * Provisions a KMS key to encrypt SSM Parameter Store secrets using [terraform-aws-kms-key](https://github.com/cloudposse/terraform-aws-kms-key) module
+  * Performs `Kops` cluster lookup to find the ARNs of `masters` and `nodes` by using [terraform-aws-kops-metadata](https://github.com/cloudposse/terraform-aws-kops-metadata) module
+  * Creates a role with the name `cp-prod-chamber-kops` with permission to read all SSM parameters from the path `kops`, 
+  and gives permission to the Kops `masters` and `nodes` to assume the role
+
+  ```hcl
+  module "kms_key" {
+    source      = "git::https://github.com/cloudposse/terraform-aws-kms-key.git?ref=master"
+    namespace   = "cp"
+    stage       = "prod"
+    name        = "chamber"
+    description = "KMS key for SSM"
+  }
+
+  module "kops_metadata" {
+    source       = "git::https://github.com/cloudposse/terraform-aws-kops-metadata.git?ref=master"
+    dns_zone     = "us-west-2.prod.cloudposse.co"
+    masters_name = "masters"
+    nodes_name   = "nodes"
+  }
+
+  module "ssm_iam_role" {
+    source           = "git::https://github.com/cloudposse/terraform-aws-ssm-iam-role.git?ref=master"
+    namespace        = "cp"
+    stage            = "prod"
+    name             = "chamber"
+    attributes       = ["kops"]
+    region           = "us-west-2"
+    account_id       = "XXXXXXXXXXX"
+    assume_role_arns = ["${module.kops_metadata.masters_role_arn}", "${module.kops_metadata.nodes_role_arn}"]
+    kms_key_arn      = "${module.kms_key.key_arn}"
+    ssm_parameters   = ["kops/*"]
+    ssm_actions      = ["ssm:GetParametersByPath", "ssm:GetParameters"]
+  }
+  ```
+
+include:
+  - "docs/targets.md"
+  - "docs/terraform.md"
+
+# Contributors to this project
+contributors:
+  - name: "Andriy Knysh"
+    github: "aknysh"
