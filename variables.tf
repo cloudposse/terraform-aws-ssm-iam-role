@@ -41,8 +41,8 @@ variable "account_id" {
   description = "AWS account ID"
 }
 
-variable "kms_key_arn" {
-  description = "ARN of the KMS key which will encrypt/decrypt SSM secret strings"
+variable "kms_key_reference" {
+  description = "The Key ID, Key ARN, Key Alias Name, or Key Alias ARN of the KMS key which will encrypt/decrypt SSM secret strings"
 }
 
 variable "assume_role_arns" {
