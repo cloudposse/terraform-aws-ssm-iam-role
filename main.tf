@@ -8,7 +8,17 @@ module "label" {
   tags       = "${var.tags}"
 }
 
+locals {
+  policy_only = "${length(var.assume_role_arns) > 0 ? 1 : 0}"
+}
+
+data "aws_kms_key" "default" {
+  key_id = "${var.kms_key_reference}"
+}
+
 data "aws_iam_policy_document" "assume_role" {
+  count = "${local.policy_only}"
+
   statement {
     effect  = "Allow"
     actions = ["sts:AssumeRole"]
@@ -45,7 +55,7 @@ data "aws_iam_policy_document" "default" {
 
   statement {
     actions   = ["kms:Decrypt"]
-    resources = ["${var.kms_key_arn}"]
+    resources = ["${data.aws_kms_key.default.arn}"]
     effect    = "Allow"
   }
 }
@@ -57,13 +67,17 @@ resource "aws_iam_policy" "default" {
 }
 
 resource "aws_iam_role" "default" {
+  count = "${local.policy_only}"
+
   name                 = "${module.label.id}"
-  assume_role_policy   = "${data.aws_iam_policy_document.assume_role.json}"
+  assume_role_policy   = "${join("",data.aws_iam_policy_document.assume_role.*.json)}"
   description          = "IAM Role with permissions to perform actions on SSM resources"
   max_session_duration = "${var.max_session_duration}"
 }
 
 resource "aws_iam_role_policy_attachment" "default" {
-  role       = "${aws_iam_role.default.name}"
-  policy_arn = "${aws_iam_policy.default.arn}"
+  count = "${local.policy_only}"
+
+  role       = "${join("",aws_iam_role.default.*.name)}"
+  policy_arn = "${join("",aws_iam_policy.default.*.arn)}"
 }
