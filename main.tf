@@ -35,7 +35,7 @@ data "aws_iam_policy_document" "assume_role" {
 
     principals {
       type        = "AWS"
-      identifiers = ["${var.assume_role_arns}"]
+      identifiers = "${var.assume_role_arns}"
     }
   }
 }
@@ -48,8 +48,8 @@ data "aws_iam_policy_document" "default" {
   }
 
   statement {
-    actions   = ["${var.ssm_actions}"]
-    resources = ["${formatlist("arn:aws:ssm:%s:%s:parameter/%s", var.region, var.account_id, var.ssm_parameters)}"]
+    actions   = "${var.ssm_actions}"
+    resources = "${formatlist("arn:aws:ssm:%s:%s:parameter/%s", var.region, var.account_id, var.ssm_parameters)}"
     effect    = "Allow"
   }
 
