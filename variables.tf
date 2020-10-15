@@ -41,6 +41,12 @@ variable "account_id" {
   description = "AWS account ID"
 }
 
+variable "account_type"{
+  type        = string
+  description = "AWS account type e.g. aws or aws-us-gov"
+  default     = "aws"
+}
+
 variable "kms_key_reference" {
   description = "The Key ID, Key ARN, Key Alias Name, or Key Alias ARN of the KMS key which will encrypt/decrypt SSM secret strings"
 }
