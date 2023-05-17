@@ -1,43 +1,43 @@
 variable "namespace" {
-  type        = "string"
+  type        = string
   description = "Namespace (e.g. `cp` or `cloudposse`)"
 }
 
 variable "stage" {
-  type        = "string"
+  type        = string
   description = "Stage (e.g. `prod`, `dev`, `staging`)"
 }
 
 variable "name" {
-  type        = "string"
+  type        = string
   description = "Name (e.g. `app` or `chamber`)"
 }
 
 variable "delimiter" {
-  type        = "string"
+  type        = string
   default     = "-"
   description = "Delimiter to be used between `namespace`, `stage`, `name` and `attributes`"
 }
 
 variable "attributes" {
-  type        = "list"
+  type        = list(string)
   default     = []
   description = "Additional attributes (e.g. `1`)"
 }
 
 variable "tags" {
-  type        = "map"
+  type        = map(string)
   default     = {}
   description = "Additional tags (e.g. map(`BusinessUnit`,`XYZ`)"
 }
 
 variable "region" {
-  type        = "string"
+  type        = string
   description = "AWS Region"
 }
 
 variable "account_id" {
-  type        = "string"
+  type        = string
   description = "AWS account ID"
 }
 
@@ -46,18 +46,18 @@ variable "kms_key_reference" {
 }
 
 variable "assume_role_arns" {
-  type        = "list"
+  type        = list(string)
   description = "List of ARNs to allow assuming the role. Could be AWS services or accounts, Kops nodes, IAM users or groups"
 }
 
 variable "ssm_actions" {
-  type        = "list"
+  type        = list(string)
   default     = ["ssm:GetParametersByPath", "ssm:GetParameters"]
   description = "SSM actions to allow"
 }
 
 variable "ssm_parameters" {
-  type        = "list"
+  type        = list(string)
   description = "List of SSM parameters to apply the actions. A parameter can include a path and a name pattern that you define by using forward slashes, e.g. `kops/secret-*`"
 }
 
