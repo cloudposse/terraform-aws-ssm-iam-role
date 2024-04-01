@@ -1,0 +1,7 @@
+# Upstream changes from _extends are only recognized when modifications are made to this file in the default branch.
+_extends: .github
+repository:
+  name: terraform-aws-ssm-iam-role
+  description: Terraform module to provision an IAM role with configurable permissions to access SSM Parameter Store
+  homepage: https://cloudposse.com/accelerate
+  topics: ssm, parameter-store, iam, role, permissions, chamber, kms, terraform, terraform-module, aws, secrets, kubernetes, kube2iam, kiam
