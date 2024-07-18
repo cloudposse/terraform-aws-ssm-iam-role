@@ -5,3 +5,4 @@ repository:
   description: Terraform module to provision an IAM role with configurable permissions to access SSM Parameter Store
   homepage: https://cloudposse.com/accelerate
   topics: ssm, parameter-store, iam, role, permissions, chamber, kms, terraform, terraform-module, aws, secrets, kubernetes, kube2iam, kiam
+
