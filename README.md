@@ -242,7 +242,7 @@ No requirements.
 | <a name="input_name"></a> [name](#input\_name) | Name (e.g. `app` or `chamber`) | `string` | n/a | yes |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace (e.g. `cp` or `cloudposse`) | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | AWS Region | `string` | n/a | yes |
-| <a name="input_ssm_actions"></a> [ssm\_actions](#input\_ssm\_actions) | SSM actions to allow | `list(string)` | <pre>[<br>  "ssm:GetParametersByPath",<br>  "ssm:GetParameters"<br>]</pre> | no |
+| <a name="input_ssm_actions"></a> [ssm\_actions](#input\_ssm\_actions) | SSM actions to allow | `list(string)` | <pre>[<br/>  "ssm:GetParametersByPath",<br/>  "ssm:GetParameters"<br/>]</pre> | no |
 | <a name="input_ssm_parameters"></a> [ssm\_parameters](#input\_ssm\_parameters) | List of SSM parameters to apply the actions. A parameter can include a path and a name pattern that you define by using forward slashes, e.g. `kops/secret-*` | `list(string)` | n/a | yes |
 | <a name="input_stage"></a> [stage](#input\_stage) | Stage (e.g. `prod`, `dev`, `staging`) | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Additional tags (e.g. map(`BusinessUnit`,`XYZ`) | `map(string)` | `{}` | no |
